@@ -1,0 +1,3 @@
+Put PNG or JPG screenshots here (a frame of a colourful game you know well works great).
+Then press Y in Display Tuner to cycle to them.
+Coloque aqui capturas de tela em PNG ou JPG; no Display Tuner aperte Y para trocar de imagem.

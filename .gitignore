@@ -1,0 +1,6 @@
+ThemeStore/themestore/themestore
+ThemeStore/themestore/cache/
+ThemeStore/themestore/log.txt
+DisplayTuner/displaytuner/displaytuner
+release/
+*.o
