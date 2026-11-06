@@ -2,5 +2,8 @@ ThemeStore/themestore/themestore
 ThemeStore/themestore/cache/
 ThemeStore/themestore/log.txt
 DisplayTuner/displaytuner/displaytuner
+LoadingPicker/loadingpicker/loadingpicker
+LoadingPicker/loadingpicker/cache/
+LoadingPicker/loadingpicker/log.txt
 release/
 *.o

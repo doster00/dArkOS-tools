@@ -7,15 +7,16 @@ Each one is a launcher script plus a folder: drop both into your Tools folder an
 |---|---|
 | **[Theme Store](ThemeStore/)** | Browse about 55 EmulationStation themes with previews and per-resolution compatibility, install, remove and switch themes from the console. |
 | **[Display Tuner](DisplayTuner/)** | Adjust gamma, brightness, contrast, saturation and warmth while looking at a reference picture (or your own screenshot); hold X to compare with the original; the setting is saved and comes back after every boot and game. |
+| **[Loading Picker](LoadingPicker/)** | Choose the picture shown while a game opens: your own gallery plus free photos from Picsum Photos, cropped to the screen, with the original kept so you can go back. |
 
 ![Theme Store](screenshots/themestore-1-list.png)
 ![Display Tuner](screenshots/displaytuner-1-natural.png)
 
 ## Install
-1. Download the zips from the **[Releases](../../releases)** page (`ThemeStore-tools.zip`, `DisplayTuner-tools.zip`).
+1. Download the zips from the **[Releases](../../releases)** page (`ThemeStore-tools.zip`, `DisplayTuner-tools.zip`, `LoadingPicker-tools.zip`).
 2. Put the console's games card in your PC (or use the USB-C cable, which shows the console as a media device) and open the **`tools`** folder of the **EASYROMS** partition (`/roms/tools` on the console).
 3. **Extract the zip right into that folder** ("Extract here"), so that for example `Theme Store.sh` and `themestore/` sit **next to each other** directly inside `tools` (not inside another folder).
-4. On the console, restart EmulationStation (Start > Quit > Restart EmulationStation) and open **Tools > Theme Store** or **Tools > Display Tuner**.
+4. On the console, restart EmulationStation (Start > Quit > Restart EmulationStation) and open **Tools > Theme Store** , **Tools > Display Tuner** or **Tools > Loading Picker**.
 
 ## Status
 **Tested on an RG52 Mini and an RG43 Pro**, and not yet driven with the pad inside EmulationStation: the screens were rendered and the downloads, installs, display changes and the boot service were exercised on the device from the command line.
