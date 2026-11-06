@@ -40,6 +40,17 @@ the old `gamma-lut.service` off so the two do not fight. Your setting is in `/ho
 **To go back to normal:** open Display Tuner, press Select, then Start. To remove it completely:
 `sudo systemctl disable --now displaytuner.service; sudo rm /etc/systemd/system/displaytuner.service /usr/local/bin/displaytuner /home/ark/.config/displaytuner.cfg`.
 
+## Updating
+Replace `Display Tuner.sh` and the `displaytuner` folder with the new ones (keep your own pictures in `displaytuner/images/`) and open **Tools > Display Tuner** once.
+The launcher brings an existing install up to date by itself: it replaces `/usr/local/bin/displaytuner` when it is older, and retires the old **Color Studio** service
+(`colorstudio.service`), carrying its saved look over to `displaytuner.cfg` so the screen does not change. Over SSH: `bash "Display Tuner.sh" --update` (no window).
+`displaytuner --version` shows the version (1.1.0).
+
+## Troubleshooting: a game or emulator will not open after using Display Tuner (or Color Studio)
+Vulkan programs (3DS/Azahar, PSP, and some ports) need to be the display's "DRM master", and a helper that holds it forever blocks them: the RetroArch log shows
+`[Vulkan] Failed to create KHR_display surface` and `Cannot open video driver`. Versions before 1.1.0 did exactly that. Update as above, then check that nobody is master:
+`sudo cat /sys/kernel/debug/dri/0/clients` should not list `colorstudio` or `displaytuner` with `master = y`.
+
 ## How it works
 Gamma, brightness, contrast and warmth go in the display's 1D `GAMMA_LUT`; saturation goes in the 3D `CUBIC_LUT`, composed with the panel's own white-point table
 (`/etc/panel-lut/current.lut`, present on the RG43H) so that calibration is kept. If the screen cannot be adjusted on your system the app says **PREVIEW ONLY** and changes only the picture.

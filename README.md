@@ -18,8 +18,13 @@ Each one is a launcher script plus a folder: drop both into your Tools folder an
 4. On the console, restart EmulationStation (Start > Quit > Restart EmulationStation) and open **Tools > Theme Store** or **Tools > Display Tuner**.
 
 ## Status
-**Tested on an RG52 Mini only**, and not yet driven with the pad inside EmulationStation: the screens were rendered and the downloads, installs, display changes and the boot service were exercised on the device from the command line.
+**Tested on an RG52 Mini and an RG43 Pro**, and not yet driven with the pad inside EmulationStation: the screens were rendered and the downloads, installs, display changes and the boot service were exercised on the device from the command line.
 Feedback from the RG43H / RG43V and R36S is welcome. Use at your own risk.
+
+## Updating, and a fix you may need (Display Tuner 1.1.0)
+Versions before **1.1.0** (and the older "Color Studio") left a boot helper holding the screen's DRM master, which stops Vulkan programs from opening: a 3DS (Azahar) or PSP game, or even the Wi-Fi screen, would not start after you used the tool.
+Replace `Display Tuner.sh` and the `displaytuner` folder and open **Tools > Display Tuner** once (or **Tools > Display Tuner - Update**, which has no window and is the way to go if nothing opens). It updates the helper by itself, turns off the old `colorstudio.service` and keeps the look you had.
+Checked on an RG52 Mini and an RG43 Pro: before the update the helper was the only DRM master and the 3DS launch failed with `Failed to create KHR_display surface`; after it, nobody is master and the game opens. Details in `DisplayTuner/displaytuner/CHANGELOG.md`.
 
 ## Requirements and notes
 - dArkOS (EmulationStation-fcamod) with `curl`, `unzip`, `sudo` and `/opt/inttools/gamecontrollerdb.txt` (all in the image). Theme Store needs Wi-Fi to download.
@@ -39,4 +44,5 @@ MIT (see `LICENSE`). `stb_image.h` and `stb_truetype.h` are public domain (Sean 
 ## Português
 Apps pequenos e leves para o **dArkOS** (RG52 Mini, RG43H / RG43V e outros consoles RK3562): **Theme Store** (loja de temas do ES, com prévia e compatibilidade por resolução) e **Display Tuner** (ajuste de gamma, brilho, contraste, saturação e calor olhando uma imagem de referência; segure X para comparar).
 **Instalação:** baixe o zip em *Releases*, abra a pasta `tools` da partição EASYROMS e use **"Extrair aqui"**, de modo que o `.sh` e a pasta do app fiquem lado a lado dentro de `tools`. Reinicie o ES e abra pelo menu **Tools**.
-Testado só no RG52 Mini. Uso por sua conta e risco.
+Testado no RG52 Mini e no RG43 Pro. Uso por sua conta e risco.
+**Atualização (Display Tuner 1.1.0):** versões anteriores (e o antigo "Color Studio") deixavam um ajudante de boot segurando a tela (DRM master), o que impede programas Vulkan de abrir: jogo de 3DS (Azahar) ou PSP, ou até a tela de Wi-Fi, não abria depois de usar a ferramenta. Troque o `Display Tuner.sh` e a pasta `displaytuner`, e abra **Tools > Display Tuner** uma vez (ou **Tools > Display Tuner - Update**, que não abre janela e é o caminho se nada abrir). Ele atualiza o ajudante sozinho, desliga o `colorstudio.service` antigo e mantém o seu visual.

@@ -15,6 +15,7 @@
 #include <unistd.h>
 
 #define LIVE "/tmp/displaytuner.live"
+#define DT_VERSION "1.1.0"
 
 static const char *FONTS[] = { "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "/usr/share/fonts/dejavu/DejaVuSans.ttf", NULL };
 static const char *BOLDS[] = { "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf", NULL };
@@ -56,6 +57,7 @@ static int run_helper(int keep)
 
 int main(int argc, char **argv)
 {
+    if (argc > 1 && !strcmp(argv[1], "--version")) { printf("Display Tuner %s\n", DT_VERSION); return 0; }
     if (argc > 1 && !strcmp(argv[1], "--apply")) return run_helper(0);
     if (argc > 1 && !strcmp(argv[1], "--keep")) return run_helper(1);
     if (argc > 1 && !strcmp(argv[1], "--reset")) {         /* neutral gamma and an identity (or panel-only) 3D table */

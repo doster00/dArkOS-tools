@@ -122,6 +122,7 @@ static struct {
     int (*CreateBlob)(int, const void *, size_t, uint32_t *); int (*DestroyBlob)(int, uint32_t);
     void *(*AtomicAlloc)(void); void (*AtomicFree)(void *);
     int (*AtomicAdd)(void *, uint32_t, uint32_t, uint64_t); int (*AtomicCommit)(int, void *, uint32_t, void *);
+    int (*DropMaster)(int); int (*SetMaster)(int);        /* optional: older libdrm may lack them */
 } D;
 
 static struct { int fd; uint32_t crtc, gprop, cprop; int gn; int caps; } hw = { -1 };
@@ -139,6 +140,8 @@ static int load_drm(void)
     SYM(AtomicAlloc, "drmModeAtomicAlloc") SYM(AtomicFree, "drmModeAtomicFree") SYM(AtomicAdd, "drmModeAtomicAddProperty")
     SYM(AtomicCommit, "drmModeAtomicCommit")
 #undef SYM
+    *(void **)&D.DropMaster = dlsym(D.h, "drmDropMaster");
+    *(void **)&D.SetMaster = dlsym(D.h, "drmSetMaster");
     return 1;
 }
 
@@ -151,6 +154,11 @@ int hw_init(void)
         snprintf(path, sizeof path, "/dev/dri/card%d", n);
         int fd = open(path, O_RDWR | O_CLOEXEC);
         if (fd < 0) continue;
+        /* The first process to open the card becomes its DRM master. The boot service (--keep) starts before EmulationStation and
+         * keeps this descriptor for as long as the console is on, so it would stay master and every Vulkan program (VK_KHR_display:
+         * Azahar/3DS, PPSSPP, Sea of Stars...) would fail with "Failed to create KHR_display surface". Setting the gamma/cubic tables
+         * does not need master (an atomic commit that changes only CRTC properties works from any client), so let go of it at once. */
+        if (D.DropMaster) D.DropMaster(fd);
         if (D.SetClientCap(fd, 3, 1) != 0) { close(fd); continue; }          /* DRM_CLIENT_CAP_ATOMIC */
         DRes *res = D.GetRes(fd);
         int found = 0;
@@ -219,6 +227,11 @@ int hw_apply(const Adjust *a, int touch_cubic)
         if (gblob && D.AtomicAdd(req, hw.crtc, hw.gprop, gblob) >= 0) added++;
         if (cblob && D.AtomicAdd(req, hw.crtc, hw.cprop, cblob) >= 0) added++;
         rc = added ? D.AtomicCommit(hw.fd, req, 0, NULL) : 1;
+        if (rc != 0 && added && D.SetMaster && D.DropMaster) {
+            /* A kernel that insists on master for this commit (the RG52 Mini's does not): borrow it for the instant it takes, which only
+             * works while nobody else holds it, and give it back at once so Vulkan programs can still open the screen. */
+            if (D.SetMaster(hw.fd) == 0) { rc = D.AtomicCommit(hw.fd, req, 0, NULL); D.DropMaster(hw.fd); }
+        }
         D.AtomicFree(req);
     }
     if (gblob) D.DestroyBlob(hw.fd, gblob);
